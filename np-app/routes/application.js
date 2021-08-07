@@ -1,8 +1,21 @@
 const router = require("express").Router();
+const multer = require("multer");
+const storage = require("../storageEngine");
+
+// init upload
+const upload = multer({
+	storage: storage,
+}).single("picture");
 
 router.post("/", (req, res) => {
-	console.log(req.files);
-	res.send("recieved");
+	upload(req, res, (err) => {
+		if (err) {
+			res.send("error with file");
+			return;
+		}
+		console.log(req.file);
+		res.send("uploaded");
+	});
 });
 
 module.exports = router;

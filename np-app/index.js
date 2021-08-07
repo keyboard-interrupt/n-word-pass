@@ -1,14 +1,12 @@
 require("dotenv").config();
 
-const path = require("path");
-
 const express = require("express");
 const ejs = require("ejs");
-
+const path = require("path");
 const applicationRouter = require("./routes/application");
 
+// create and configure app
 const app = express();
-
 app.set("view engine", "ejs");
 
 // middlewares
