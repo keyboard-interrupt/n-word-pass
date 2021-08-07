@@ -14,6 +14,11 @@ app = Flask(__name__)
 def detect_race():
     photo = request.files['photo']
     filename = path.join('uploads', str(randint(0, 4096)) + photo.filename)
+
+    if filename.split('.')[-1] not in ['png', 'jpg', 'jpeg']:
+        return {'error': 'photo must be of type png, jpg or jpeg'}
+
+    # temporarily saving
     photo.save(filename)
 
     # reading image
