@@ -4,13 +4,18 @@ const path = require("path");
 
 const express = require("express");
 const ejs = require("ejs");
-const upload = require("express-fileupload");
+
+const applicationRouter = require("./routes/application");
 
 const app = express();
 
 app.set("view engine", "ejs");
 
+// middlewares
 app.use(express.static(path.join(__dirname, "public")));
+
+// routes
+app.use("/application", applicationRouter);
 
 // ejs test
 app.get("/test", (req, res) => {
