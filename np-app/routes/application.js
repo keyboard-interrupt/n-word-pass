@@ -4,6 +4,7 @@ const formData = require("form-data");
 const axios = require("axios");
 const fs = require("fs");
 const storage = require("../storageEngine");
+const config = require("../config");
 
 // init upload
 const upload = multer({
@@ -31,7 +32,7 @@ router.post("/", (req, res) => {
 			.create({
 				headers: form.getHeaders(),
 			})
-			.post("http://localhost:5000/detect-race", form)
+			.post(`${config.RACIAL_DETECTION_API_LOCATION}/detect-race`, form)
 			.then((response) => {
 				console.log(response.data);
 

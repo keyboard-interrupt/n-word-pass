@@ -1,9 +1,8 @@
-require("dotenv").config();
-
 const express = require("express");
 const ejs = require("ejs");
 const path = require("path");
 const applicationRouter = require("./routes/application");
+const config = require("./config");
 
 // create and configure app
 const app = express();
@@ -20,5 +19,5 @@ app.get("/test", (req, res) => {
 	res.render("test", { hello: "world" });
 });
 
-const PORT = process.env.PORT || 5050;
+const PORT = config.PORT || 5050;
 app.listen(PORT, () => console.log("server live on port " + PORT));
