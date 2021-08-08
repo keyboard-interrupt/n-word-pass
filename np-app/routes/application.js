@@ -1,5 +1,8 @@
 const router = require("express").Router();
 const multer = require("multer");
+const formData = require("form-data");
+const axios = require("axios");
+const fs = require("fs");
 const storage = require("../storageEngine");
 
 // init upload
@@ -17,8 +20,37 @@ router.post("/", (req, res) => {
 			res.send("error with file");
 			return;
 		}
-		console.log(req.file);
-		res.send("uploaded");
+
+		const imgPath = req.file.path;
+		const imgName = req.file.filename;
+
+		const form = new formData();
+		form.append("photo", fs.createReadStream(imgPath));
+
+		axios
+			.create({
+				headers: form.getHeaders(),
+			})
+			.post("http://localhost:5000/detect-race", form)
+			.then((response) => {
+				console.log(response.data);
+
+				if (response.data.error) return res.send(response.data.error);
+
+				race = response.data.race.dominant_race;
+				score = response.data.race.race.black;
+
+				if (race == "black")
+					return res.send(`you are black with score of ${score}%`);
+				else return res.send(`you are not black. you are ${race}`);
+			})
+			.catch((error) => {
+				if (error.response) {
+					console.log(error.response);
+				}
+				console.log(error.message);
+				res.status(500).send("there was an error");
+			});
 	});
 });
 
